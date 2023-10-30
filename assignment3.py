@@ -5,11 +5,11 @@ import argparse
 # Add the following code to handle command-line arguments
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Process command line arguments.')
-    parser.add_argument('-l', dest='port', type=int, help='Specify the port number.')
+    parser.add_argument('-p', action='store_true', help='Allow the option to be passed to the script.')
     args = parser.parse_args()
 
-    if args.port:
-        print(f"Using port: {args.port}")
+    if args.p:
+        print("Option -p is allowed.")
 
 
 class Node:
