@@ -27,11 +27,13 @@ class SharedList:
         file_name = f"book_{str(self.counter).zfill(2)}.txt"
         with open(file_name, "w") as f:
             while current:
-                if hasattr(current, 'book_next'):
-                    f.write(current.data + "\n")
-                    current = current.book_next
-                else:
-                    current = current.next
+                if current.data == book_name:
+                    book_current = current.book_next
+                    while book_current:
+                        f.write(book_current.data + "\n")
+                        book_current = book_current.book_next
+                    break
+                current = current.next
             self.counter += 1
         print(f"Book written to {file_name}")
 
@@ -54,4 +56,3 @@ shared_list.head.next.next.book_next = Node("Page 1 of The Road to Oz")
 shared_list.print_book("Robin Hood")
 shared_list.print_book("The Apple")
 shared_list.print_book("The Road to Oz")
-
