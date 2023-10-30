@@ -2,56 +2,63 @@ class Node:
     def __init__(self, data):
         self.data = data
         self.next = None
-        self.book_next = None
-        self.next_frequent_search = None
 
+class BookNode:
+    def __init__(self, book_name):
+        self.book_name = book_name
+        self.head = None
 
 class SharedList:
     def __init__(self):
         self.head = None
-        self.tail = None
-        self.counter = 1
 
     def add_node(self, data):
         new_node = Node(data)
-        if self.head is None:
+        if not self.head:
             self.head = new_node
-            self.tail = new_node
         else:
-            self.tail.next = new_node
-            self.tail = new_node
-        print(f"Node with data '{data}' added to the shared list.")
+            current = self.head
+            while current.next:
+                current = current.next
+            current.next = new_node
+
+    def update_book_next(self, book_name, data):
+        new_node = Node(data)
+        if not self.head:
+            self.head = new_node
+        else:
+            current = self.head
+            while current.next:
+                current = current.next
+            if not hasattr(current, 'book_next'):
+                setattr(current, 'book_next', new_node)
+            else:
+                while getattr(current, 'book_next'):
+                    current = getattr(current, 'book_next')
+                setattr(current, 'book_next', new_node)
 
     def print_book(self, book_name):
         current = self.head
-        file_name = f"book_{str(self.counter).zfill(2)}.txt"
-        with open(file_name, "w") as f:
-            while current:
-                if hasattr(current, 'book_next'):
-                    f.write(current.data + "\n")
-                    current = current.book_next
-                else:
-                    current = current.next
-            self.counter += 1
-        print(f"Book written to {file_name}")
+        while current:
+            if hasattr(current, 'book_next'):
+                print(current.data)
+                current = getattr(current, 'book_next')
+            else:
+                current = current.next
 
 
 # Example usage
 shared_list = SharedList()
+books = ['Robin Hood', 'The Apple', 'The Road to Oz']
 
-# Add nodes to the shared list
-books = ["Robin Hood", "The Apple", "The Road to Oz"]
 for book in books:
     shared_list.add_node(book)
 
-# Simulating multiple reads
-shared_list.head.book_next = Node("Page 1 of Robin Hood")
-shared_list.head.book_next.book_next = Node("Page 2 of Robin Hood")
-shared_list.head.next.book_next = Node("Page 1 of The Apple")
-shared_list.head.next.next.book_next = Node("Page 1 of The Road to Oz")
+# Update book_next pointers
+shared_list.update_book_next('Robin Hood', "Page 1 of Robin Hood")
+shared_list.update_book_next('Robin Hood', "Page 2 of Robin Hood")
+shared_list.update_book_next('The Apple', "Page 1 of The Apple")
+shared_list.update_book_next('The Road to Oz', "Page 1 of The Road to Oz")
 
-# Print each book
-shared_list.print_book("Robin Hood")
-shared_list.print_book("The Apple")
-shared_list.print_book("The Road to Oz")
-
+# Print a book
+shared_list.print_book('Robin Hood')
