@@ -37,6 +37,10 @@ class SharedList:
         print(f"Book written to {file_name}")
 
 
+import socket
+
+MSGLEN = 1024  # Define MSGLEN with an appropriate value
+
 class MySocket:
     """demonstration class only
       - coded for clarity, not efficiency
@@ -44,8 +48,7 @@ class MySocket:
 
     def __init__(self, sock=None):
         if sock is None:
-            self.sock = socket.socket(
-                            socket.AF_INET, socket.SOCK_STREAM)
+            self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         else:
             self.sock = sock
 
@@ -70,6 +73,7 @@ class MySocket:
             chunks.append(chunk)
             bytes_recd = bytes_recd + len(chunk)
         return b''.join(chunks)
+
 
 
 # Example usage
